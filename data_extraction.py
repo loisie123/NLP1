@@ -13,7 +13,7 @@ print("DEV DATA")
 dev_dat = []
 
 with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-dev.conllu', 'r', newline='\n') as f:
-    reader = csv.reader(f, delimiter='\t')
+    reader = csv.reader(f, delimiter='\t', quoting=csv.QUOTE_ALL)
     for row in tqdm(reader):
         time.sleep(0.00000000001)
         if len(row) != 0:
@@ -53,7 +53,7 @@ print("TEST DATA")
 test_dat = []
 
 with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-test.conllu', 'r', newline='\n') as f:
-    reader = csv.reader(f, delimiter='\t')
+    reader = csv.reader(f, delimiter='\t', quoting=csv.QUOTE_ALL)
     for row in tqdm(reader):
         time.sleep(1e-10)
         if len(row) != 0:
@@ -93,7 +93,7 @@ print("TRAIN DATA")
 train_dat = []
 
 with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-train.conllu', 'r', newline='\n') as f:
-    reader = csv.reader(f, delimiter='\t')
+    reader = csv.reader(f, delimiter='\t', quoting=csv.QUOTE_ALL)
     for row in tqdm(reader):
         time.sleep(1e-10)
         if len(row) != 0:
