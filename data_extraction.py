@@ -3,15 +3,18 @@ import re
 import csv
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
+import time
 
 # Development data
-print("READING IN DEV DATA - START")
+print("DEV DATA")
 
 dev_dat = []
 
 with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-dev.conllu', 'r', newline='\n') as f:
     reader = csv.reader(f, delimiter='\t')
-    for row in reader:
+    for row in tqdm(reader):
+        time.sleep(0.00000000001)
         if len(row) != 0:
             if row[0].split(" ")[0] != "#":
                 del row[2]
@@ -31,18 +34,18 @@ index_occur_once = np.array(c.iloc[:,0])
 for i in range(0,len(index_occur_once)):
     dev_data.loc[index_occur_once[i],"Word"] = "<unk>"
 
-print(len(c)/len(dev_data.index)*100, "% of data was <unk>")
-print("READING IN DEV DATA - DONE")
+print(len(c)/len(dev_data.index)*100, "% of dev data is '<unk>'.")
 # print(dev_data)
 
 # Test data
-print("READING IN TEST DATA - START")
+print("TEST DATA")
 
 test_dat = []
 
 with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-test.conllu', 'r', newline='\n') as f:
     reader = csv.reader(f, delimiter='\t')
-    for row in reader:
+    for row in tqdm(reader):
+        time.sleep(1e-10)
         if len(row) != 0:
             if row[0].split(" ")[0] != "#":
                 del row[2]
@@ -62,18 +65,18 @@ index_occur_once = np.array(c.iloc[:,0])
 for i in range(0,len(index_occur_once)):
     test_data.loc[index_occur_once[i],"Word"] = "<unk>"
 
-print(len(c)/len(test_data.index)*100, "% of data was <unk>")
-print("READING IN TEST DATA - DONE")
+print(len(c)/len(test_data.index)*100, "% of test data is '<unk>'.")
 # print(test_data)
 
 # Train data
-print("READING IN TRAIN DATA - START")
+print("TRAIN DATA")
 
 train_dat = []
 
 with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-train.conllu', 'r', newline='\n') as f:
     reader = csv.reader(f, delimiter='\t')
-    for row in reader:
+    for row in tqdm(reader):
+        time.sleep(1e-10)
         if len(row) != 0:
             if row[0].split(" ")[0] != "#":
                 if len(row) == 10:
@@ -94,6 +97,5 @@ index_occur_once = np.array(c.iloc[:,0])
 for i in range(0,len(index_occur_once)):
     train_data.loc[index_occur_once[i],"Word"] = "<unk>"
 
-print(len(c)/len(train_data.index)*100, "% of data was <unk>")
-print("READING IN TRAIN DATA - DONE")
+print(len(c)/len(train_data.index)*100, "% of train data is '<unk>'.")
 # print(train_data)
