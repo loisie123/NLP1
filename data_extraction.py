@@ -31,6 +31,7 @@ index_occur_once = np.array(c.iloc[:,0])
 for i in range(0,len(index_occur_once)):
     dev_data.loc[index_occur_once[i],"Word"] = "<unk>"
 
+print(len(c)/len(dev_data.index)*100, "% of data was <unk>")
 print("READING IN DEV DATA - DONE")
 # print(dev_data)
 
@@ -61,6 +62,7 @@ index_occur_once = np.array(c.iloc[:,0])
 for i in range(0,len(index_occur_once)):
     test_data.loc[index_occur_once[i],"Word"] = "<unk>"
 
+print(len(c)/len(test_data.index)*100, "% of data was <unk>")
 print("READING IN TEST DATA - DONE")
 # print(test_data)
 
@@ -92,5 +94,6 @@ index_occur_once = np.array(c.iloc[:,0])
 for i in range(0,len(index_occur_once)):
     train_data.loc[index_occur_once[i],"Word"] = "<unk>"
 
+print(len(c)/len(train_data.index)*100, "% of data was <unk>")
 print("READING IN TRAIN DATA - DONE")
 # print(train_data)
