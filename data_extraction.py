@@ -28,6 +28,8 @@ with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-dev
 dev_data = pd.DataFrame(dev_dat, columns = ['Number', 'Word', "POS", "POS2", "NUMBER-ARC", "LABEL-ARC"])
 dev_data.reset_index(inplace=True)
 
+dev_data["Index"] = dev_data.index
+
 # replace values that occur once
 c = dev_data.sort_index().groupby('Word').filter(lambda group: len(group) == 1)
 index_occur_once = np.array(c.iloc[:,0])
@@ -38,12 +40,15 @@ print(len(c)/len(dev_data.index)*100, "% of dev data is '<unk>'.")
 # print(dev_data)
 
 # Create dictionaries for indexing
-w2i_dev = dev_data.set_index('Word')['index'].to_dict()
-i2w_dev = dev_data.set_index('index')['Word'].to_dict()
-t2i_dev = dev_data.set_index('POS')['index'].to_dict()
-i2t_dev = dev_data.set_index('index')['POS'].to_dict()
-l2i_dev = dev_data.set_index('LABEL-ARC')['index'].to_dict()
-i2l_dev = dev_data.set_index('index')['LABEL-ARC'].to_dict()
+# w2i_dev = dev_data.set_index('Word')['Index'].to_dict()
+w2i_dev = dev_data.groupby("Word")[["Index"]].apply(lambda x: x["Index"].to_dict())
+i2w_dev = dev_data.set_index('Index')['Word'].to_dict()
+# t2i_dev = dev_data.set_index('POS')['index'].to_dict()
+t2i_dev = dev_data.groupby("POS")[["Index"]].apply(lambda x: x["Index"].to_dict())
+i2t_dev = dev_data.set_index('Index')['POS'].to_dict()
+# l2i_dev = dev_data.set_index('LABEL-ARC')['index'].to_dict()
+l2i_dev = dev_data.groupby("LABEL-ARC")[["Index"]].apply(lambda x: x["Index"].to_dict())
+i2l_dev = dev_data.set_index('Index')['LABEL-ARC'].to_dict()
 
 ######################################################################################################################################
 
@@ -68,6 +73,8 @@ with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-tes
 test_data = pd.DataFrame(test_dat, columns = ['Number', 'Word', "POS", "POS2", "NUMBER-ARC", "LABEL-ARC"])
 test_data.reset_index(inplace=True)
 
+test_data["Index"] = test_data.index
+
 # replace values that occur once
 c = test_data.sort_index().groupby('Word').filter(lambda group: len(group) == 1)
 index_occur_once = np.array(c.iloc[:,0])
@@ -78,12 +85,15 @@ print(len(c)/len(test_data.index)*100, "% of test data is '<unk>'.")
 # print(test_data)
 
 # Create dictionaries for indexing
-w2i_test = test_data.set_index('Word')['index'].to_dict()
-i2w_test = test_data.set_index('index')['Word'].to_dict()
-t2i_test = test_data.set_index('POS')['index'].to_dict()
-i2t_test = test_data.set_index('index')['POS'].to_dict()
-l2i_test = test_data.set_index('LABEL-ARC')['index'].to_dict()
-i2l_test = test_data.set_index('index')['LABEL-ARC'].to_dict()
+# w2i_test = test_data.set_index('Word')['index'].to_dict()
+w2i_test = test_data.groupby("Word")[["Index"]].apply(lambda x: x["Index"].to_dict())
+i2w_test = test_data.set_index('Index')['Word'].to_dict()
+# t2i_test = test_data.set_index('POS')['index'].to_dict()
+t2i_test = test_data.groupby("POS")[["Index"]].apply(lambda x: x["Index"].to_dict())
+i2t_test = test_data.set_index('Index')['POS'].to_dict()
+# l2i_test = test_data.set_index('LABEL-ARC')['index'].to_dict()
+l2i_test = test_data.groupby("LABEL-ARC")[["Index"]].apply(lambda x: x["Index"].to_dict())
+i2l_test = test_data.set_index('Index')['LABEL-ARC'].to_dict()
 
 ######################################################################################################################################
 
@@ -109,6 +119,8 @@ with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-tra
 train_data = pd.DataFrame(train_dat, columns = ['Number', 'Word', "POS", "POS2", "NUMBER-ARC", "LABEL-ARC"])
 train_data.reset_index(inplace=True)
 
+train_data["Index"] = train_data.index
+
 # replace values that occur once
 c = train_data.sort_index().groupby('Word').filter(lambda group: len(group) == 1)
 index_occur_once = np.array(c.iloc[:,0])
@@ -119,11 +131,14 @@ print(len(c)/len(train_data.index)*100, "% of train data is '<unk>'.")
 # print(train_data)
 
 # Create dictionaries for indexing
-w2i_train = train_data.set_index('Word')['index'].to_dict()
-i2w_train = train_data.set_index('index')['Word'].to_dict()
-t2i_train = train_data.set_index('POS')['index'].to_dict()
-i2t_train = train_data.set_index('index')['POS'].to_dict()
-l2i_train = train_data.set_index('LABEL-ARC')['index'].to_dict()
-i2l_train = train_data.set_index('index')['LABEL-ARC'].to_dict()
+# w2i_train = train_data.set_index('Word')['index'].to_dict()
+w2i_train = train_data.groupby("Word")[["Index"]].apply(lambda x: x["Index"].to_dict())
+i2w_train = train_data.set_index('Index')['Word'].to_dict()
+# t2i_train = train_data.set_index('POS')['index'].to_dict()
+t2i_train = train_data.groupby("POS")[["Index"]].apply(lambda x: x["Index"].to_dict())
+i2t_train = train_data.set_index('Index')['POS'].to_dict()
+# l2i_train = train_data.set_index('LABEL-ARC')['index'].to_dict()
+l2i_train = train_data.groupby("LABEL-ARC")[["Index"]].apply(lambda x: x["Index"].to_dict())
+i2l_train = train_data.set_index('Index')['LABEL-ARC'].to_dict()
 
 ######################################################################################################################################
