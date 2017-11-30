@@ -1,53 +1,96 @@
 from conllu.parser import parse, parse_tree
 import re
 import csv
+import numpy as np
+import pandas as pd
 
-# example_data = """
-# 1	Al	Al	PROPN	NNP	Number=Sing	0	root	0:root	SpaceAfter=No
-# 2	-	-	PUNCT	HYPH	_	1	punct	1:punct	SpaceAfter=No
-# 3	Zaman	Zaman	PROPN	NNP	Number=Sing	1	flat	1:flat	_
-# 4	:	:	PUNCT	:	_	1	punct	1:punct	_
-# 5	American	american	ADJ	JJ	Degree=Pos	6	amod	6:amod	_
-# 6	forces	force	NOUN	NNS	Number=Plur	7	nsubj	7:nsubj	_
-# 7	killed	kill	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	1	parataxis	1:parataxis	_
-# 8	Shaikh	Shaikh	PROPN	NNP	Number=Sing	7	obj	7:obj	_
-# 9	Abdullah	Abdullah	PROPN	NNP	Number=Sing	8	flat	8:flat	_
-# 10	al	al	PROPN	NNP	Number=Sing	8	flat	8:flat	SpaceAfter=No
-# 11	-	-	PUNCT	HYPH	_	8	punct	8:punct	SpaceAfter=No
-# 12	Ani	Ani	PROPN	NNP	Number=Sing	8	flat	8:flat	SpaceAfter=No
-# 13	,	,	PUNCT	,	_	8	punct	8:punct	_
-# 14	the	the	DET	DT	Definite=Def|PronType=Art	15	det	15:det	_
-# 15	preacher	preacher	NOUN	NN	Number=Sing	8	appos	8:appos	_
-# 16	at	at	ADP	IN	_	18	case	18:case	_
-# 17	the	the	DET	DT	Definite=Def|PronType=Art	18	det	18:det	_
-# 18	mosque	mosque	NOUN	NN	Number=Sing	7	obl	7:obl	_
-# 19	in	in	ADP	IN	_	21	case	21:case	_
-# 20	the	the	DET	DT	Definite=Def|PronType=Art	21	det	21:det	_
-# 21	town	town	NOUN	NN	Number=Sing	18	nmod	18:nmod	_
-# 22	of	of	ADP	IN	_	23	case	23:case	_
-# 23	Qaim	Qaim	PROPN	NNP	Number=Sing	21	nmod	21:nmod	SpaceAfter=No
-# 24	,	,	PUNCT	,	_	21	punct	21:punct	_
-# 25	near	near	ADP	IN	_	28	case	28:case	_
-# 26	the	the	DET	DT	Definite=Def|PronType=Art	28	det	28:det	_
-# 27	Syrian	syrian	ADJ	JJ	Degree=Pos	28	amod	28:amod	_
-# 28	border	border	NOUN	NN	Number=Sing	21	nmod	21:nmod	SpaceAfter=No
-# 29	.	.	PUNCT	.	_	1	punct	1:punct	_
-# """
-#
-# example_results = parse(example_data)
-#
-# x = example_results[0]
-# y = x[0]
-#
-# for i, (key, value) in enumerate(y.items()):
-#     print(i, key, value)
+# Development data
+print("READING IN DEV DATA - START")
 
-########################################################################################################
-
-dat = []
+dev_dat = []
 
 with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-dev.conllu', 'r', newline='\n') as f:
     reader = csv.reader(f, delimiter='\t')
     for row in reader:
-        dat.append(row)
-        print(row)
+        if len(row) != 0:
+            if row[0].split(" ")[0] != "#":
+                del row[2]
+                del row[4]
+                del row[4]
+                del row[4]
+                del row[-1]
+                dev_dat.append(row)
+
+# Make it a pandas dataframe
+dev_data = pd.DataFrame(dev_dat, columns = ['Number', 'Word', "POS", "LABEL", "ARC"])
+dev_data.reset_index(inplace=True)
+
+# replace values that occur once
+c = dev_data.sort_index().groupby('Word').filter(lambda group: len(group) == 1)
+index_occur_once = np.array(c.iloc[:,0])
+for i in range(0,len(index_occur_once)):
+    dev_data.loc[index_occur_once[i],"Word"] = "<unk>"
+
+print("READING IN DEV DATA - DONE")
+# print(dev_data)
+
+# Test data
+print("READING IN TEST DATA - START")
+
+test_dat = []
+
+with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-test.conllu', 'r', newline='\n') as f:
+    reader = csv.reader(f, delimiter='\t')
+    for row in reader:
+        if len(row) != 0:
+            if row[0].split(" ")[0] != "#":
+                del row[2]
+                del row[4]
+                del row[4]
+                del row[4]
+                del row[-1]
+                test_dat.append(row)
+
+# Make it a pandas dataframe
+test_data = pd.DataFrame(test_dat, columns = ['Number', 'Word', "POS", "LABEL", "ARC"])
+test_data.reset_index(inplace=True)
+
+# replace values that occur once
+c = test_data.sort_index().groupby('Word').filter(lambda group: len(group) == 1)
+index_occur_once = np.array(c.iloc[:,0])
+for i in range(0,len(index_occur_once)):
+    test_data.loc[index_occur_once[i],"Word"] = "<unk>"
+
+print("READING IN TEST DATA - DONE")
+# print(test_data)
+
+# Train data
+print("READING IN TRAIN DATA - START")
+
+train_dat = []
+
+with open('/home/koen/Documents/NaturalLanguageProcessing/Project/NLP1/en-ud-train.conllu', 'r', newline='\n') as f:
+    reader = csv.reader(f, delimiter='\t')
+    for row in reader:
+        if len(row) != 0:
+            if row[0].split(" ")[0] != "#":
+                if len(row) == 10:
+                    del row[2]
+                    del row[4]
+                    del row[4]
+                    del row[4]
+                    del row[-1]
+                    train_dat.append(row)
+
+# Make it a pandas dataframe
+train_data = pd.DataFrame(train_dat, columns = ['Number', 'Word', "POS", "LABEL", "ARC"])
+train_data.reset_index(inplace=True)
+
+# replace values that occur once
+c = train_data.sort_index().groupby('Word').filter(lambda group: len(group) == 1)
+index_occur_once = np.array(c.iloc[:,0])
+for i in range(0,len(index_occur_once)):
+    train_data.loc[index_occur_once[i],"Word"] = "<unk>"
+
+print("READING IN TRAIN DATA - DONE")
+# print(train_data)
